@@ -2,6 +2,7 @@ import * as React from "react";
 import 'react-dice-complete/dist/react-dice-complete.css'
 import API from "./API";
 import "./css/game.css"
+import Game from "./Game";
 
 export default class GamesCreator extends React.Component {
 
@@ -64,6 +65,7 @@ export default class GamesCreator extends React.Component {
             }
             </tbody>
           </table>
+          <Game/>
         </div>
     )
   }

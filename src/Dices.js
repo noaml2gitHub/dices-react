@@ -4,11 +4,19 @@ import 'react-dice-complete/dist/react-dice-complete.css'
 
 export default class Dices extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      numberOfDices: props.numberOfDices
+
+    }
+  }
+
   render() {
     return (
         <div>
           <ReactDice
-              numDice={5}
+              numDice={this.state.numberOfDices}
               rollDone={this.rollDoneCallback}
               ref={dice => this.reactDice = dice}
           />
@@ -22,7 +30,7 @@ export default class Dices extends React.Component {
   }
 
   rollDoneCallback(num) {
-    console.log(`You rolled a ${num}`)
+    alert(`You rolled a ${num}`)
   }
 
 }
