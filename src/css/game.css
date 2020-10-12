@@ -1,0 +1,13 @@
+.game-creator {
+  margin: auto;
+  width: 100%;
+  padding-left: 50%;
+}
+
+table, th, td {
+  border: #282c34 1px solid;
+}
+
+thead{
+  background-color: gold;
+}

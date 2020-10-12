@@ -1,24 +1,44 @@
 import * as React from "react";
 import ReactDice from 'react-dice-complete'
 import 'react-dice-complete/dist/react-dice-complete.css'
+import API from "./API";
 
-export default class Home extends React.Component{
+export default class Dices extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      player:"noam"
+    this.state = {
+      player: "noam"
     }
   }
 
-   rename(){
-    this.setState({
-      player:"dddd"
+  callApi = () => {
+    return API.get(
+        'games',
+    )
+    .then((response) => {
+          if (response.data) {
+            debugger
+          }
+          else {
+            throw Error("Some Error!!!!")
+          }
+        }
+    )
+    .catch((e) => {
+      throw e;
     })
-   }
+
+  }
+
+  rename() {
+    this.setState({
+      player: "dddd"
+    })
+  }
 
   render() {
-    const {player}=this.state;
+    const {player} = this.state;
     return (
         <div>
           <p>Player is: {player}</p>
@@ -27,7 +47,7 @@ export default class Home extends React.Component{
               rollDone={this.rollDoneCallback}
               ref={dice => this.reactDice = dice}
           />
-          <button onClick={()=>this.rename()}>Click</button>
+          <button onClick={() => this.callApi()}>Click</button>
         </div>
     )
   }
@@ -39,6 +59,5 @@ export default class Home extends React.Component{
   rollDoneCallback(num) {
     console.log(`You rolled a ${num}`)
   }
-
 
 }
