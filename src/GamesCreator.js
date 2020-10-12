@@ -64,7 +64,6 @@ export default class GamesCreator extends React.Component {
             }
             </tbody>
           </table>
-
         </div>
     )
   }
