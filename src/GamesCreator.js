@@ -2,7 +2,6 @@ import * as React from "react";
 import 'react-dice-complete/dist/react-dice-complete.css'
 import API from "./API";
 import "./css/game.css"
-import Game from "./Game";
 
 export default class GamesCreator extends React.Component {
 
@@ -10,8 +9,8 @@ export default class GamesCreator extends React.Component {
     super(props);
     this.state = {
       games: []
-
     }
+    this.getAllGames();
   }
 
   createGame = () => {
@@ -34,7 +33,43 @@ export default class GamesCreator extends React.Component {
     .catch((e) => {
       throw e;
     })
+  }
 
+  getAllGames = () => {
+    return API.get(
+        'games',
+    )
+    .then((response) => {
+          debugger
+          if (response.data) {
+            let arr = response.data;
+            this.setState({
+              games: arr
+            })
+          }
+          else {
+            throw Error("Some Error!!!!")
+          }
+        }
+    )
+    .catch((e) => {
+      throw e;
+    })
+  }
+
+  deleteGame = (game) => {
+    return API.delete(
+        'games/'+ game.guid,
+    ).then((response) => {
+      let arr = this.state.games;
+      let index = arr.indexOf(game);
+      if (index !== -1){
+        arr.splice(index, 1);
+        this.setState({
+          games: arr
+        })
+      }
+    })
   }
 
   render() {
@@ -43,6 +78,7 @@ export default class GamesCreator extends React.Component {
         <div className={"game-creator"}>
           <p><b>Active Games</b></p>
           <button onClick={() => this.createGame()}>Add Game</button>
+          <button onClick={() => this.getAllGames()}>Get All Games</button>
           <table>
             <thead>
             <tr>
@@ -58,16 +94,14 @@ export default class GamesCreator extends React.Component {
                       <td>{game.guid}</td>
                       <td>{game.state}</td>
                       <td>
-                        <button>Delete</button>
+                        <button onClick={()=>this.deleteGame(game)}>Delete</button>
                       </td>
                     </tr>
               })
             }
             </tbody>
           </table>
-          <Game/>
         </div>
     )
   }
-
 }
