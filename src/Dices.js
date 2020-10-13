@@ -45,13 +45,14 @@ export default class Dices extends React.Component {
       debugger
       if (response.data) {
         let arr = response.data;
-        let values = []
+        let values = [];
         arr.map((dice) => {
-          values.push(dice.value)
-        })
+          values.push(dice.value);
+          return values;
+        });
         this.setState({
           values: values
-        })
+        });
         this.reactDice.rollAll(this.state.values)
       }
       else {

@@ -23,6 +23,13 @@ export default class Game extends React.Component {
     })
   }
 
+  handleGameGuidChange = (value) => {
+    this.setState({
+      gameGuid: value.target.value,
+      start: false
+    })
+  }
+
   handleChange = (value) => {
     this.setState({
       numOfDices: value.target.value,
@@ -40,6 +47,9 @@ export default class Game extends React.Component {
   render() {
     return (
         <div>
+          Enter Game Guid:
+          <input id="gameGuid" type="text" onChange={this.handleGameGuidChange}/>
+          <td/>
           Enter Your name:
           <input id="playerName" type="text" onChange={this.handlePlayerChange}/>
           <td/>
