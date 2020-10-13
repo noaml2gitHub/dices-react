@@ -2,6 +2,7 @@ import * as React from "react";
 import 'react-dice-complete/dist/react-dice-complete.css'
 import API from "./API";
 import "./css/game.css"
+import Game from "./Game";
 
 export default class GamesCreator extends React.Component {
 
@@ -9,7 +10,7 @@ export default class GamesCreator extends React.Component {
     super(props);
     this.state = {
       games: []
-    }
+    };
     this.getAllGames();
   }
 
@@ -40,7 +41,6 @@ export default class GamesCreator extends React.Component {
         'games',
     )
     .then((response) => {
-          debugger
           if (response.data) {
             let arr = response.data;
             this.setState({
@@ -72,6 +72,27 @@ export default class GamesCreator extends React.Component {
     })
   }
 
+  revealGame = (game) => {
+    const updateTo = {
+      state: "APPROVE_TO_REVEAL"
+    }
+    debugger
+    return API.put(
+        'games/'+ game.guid, updateTo
+    ).then((response) => {
+      if (response.data){
+        let arr = this.state.games;
+        let index = arr.indexOf(game);
+        if (index !== -1){
+          arr.splice(index, 1, response.data);
+          this.setState({
+            games: arr
+          })
+        }
+      }
+    })
+  }
+
   render() {
     const {games} = this.state;
     return (
@@ -96,11 +117,15 @@ export default class GamesCreator extends React.Component {
                       <td>
                         <button onClick={()=>this.deleteGame(game)}>Delete</button>
                       </td>
+                      <td>
+                        <button onClick={()=>this.revealGame(game)}>Reveal</button>
+                      </td>
                     </tr>
               })
             }
             </tbody>
           </table>
+        <Game gameGuid={"485270"}/> {/*FIXME: use the router to fix this*/}
         </div>
     )
   }

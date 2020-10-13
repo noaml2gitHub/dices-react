@@ -2,43 +2,79 @@ import * as React from "react";
 import 'react-dice-complete/dist/react-dice-complete.css'
 import "./css/game.css"
 import Dices from "./Dices";
+import API from "./API";
 
 export default class Game extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      numberOfDices: 0,
+      gameGuid: props.gameGuid,
+      playerName: "",
+      numOfDices: 0,
       start: false
     }
   }
 
-  handleChange = (value) => {
+  handlePlayerChange = (value) => {
     this.setState({
-      numberOfDices: value.target.value,
+      playerName: value.target.value,
       start: false
     })
   }
 
-  start = () => {
+  handleChange = (value) => {
     this.setState({
-      start: true
+      numOfDices: value.target.value,
+      start: false
+    })
+  }
+
+  start = (playerId) => {
+    this.setState({
+      start: true,
+      playerId: playerId
     })
   }
 
   render() {
     return (
         <div>
-          <div>
-            {this.state.start && this.state.numberOfDices > 0 && <Dices
-                numberOfDices={this.state.numberOfDices}/>}
-          </div>
-          הכנס מספר קוביות: <button
-            onClick={this.start}>התחל</button>
+          Enter Your name:
+          <input id="playerName" type="text" onChange={this.handlePlayerChange}/>
+          <td/>
+          Enter number of dices:
           <input type="text" onChange={this.handleChange}/>
+          <td/>
+          <button onClick={this.createPlayer}>Create Dices</button>
+          <div>
+            {this.state.start && this.state.numOfDices > 0 && <Dices
+                numberOfDices={this.state.numOfDices} gameGuid={this.state.gameGuid} playerId={this.state.playerId}/>}
+          </div>
         </div>
-
     )
   }
 
+  createPlayer = () => {
+    const player = {
+          gameGuid: this.state.gameGuid,
+          name: this.state.playerName,
+          numberOfDices: this.state.numOfDices
+        }
+    ;
+    API.post(
+        'players', player
+        )
+        .then((response) => {
+          if (response.data) {
+            this.start(response.data.id)
+          }
+          else {
+            throw Error("Some Error!!!!")
+          }
+        })
+        .catch((e) => {
+          throw e;
+        })
+  }
 }
