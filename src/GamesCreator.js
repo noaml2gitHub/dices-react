@@ -125,7 +125,7 @@ export default class GamesCreator extends React.Component {
             }
             </tbody>
           </table>
-        <Game gameGuid={"485270"}/> {/*FIXME: use the router to fix this*/}
+        <Game/>
         </div>
     )
   }
