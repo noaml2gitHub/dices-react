@@ -12,7 +12,8 @@ export default class Game extends React.Component {
       gameGuid: undefined,
       playerName: "",
       numOfDices: 0,
-      start: false
+      start: false,
+      error: undefined
     }
   }
 
@@ -53,34 +54,36 @@ export default class Game extends React.Component {
 
   render() {
 
-    if (this.state.guid === undefined) {
+    if (this.state.gameGuid === undefined) {
       return <div>NOT A VALID GAME</div>
     }
 
     return (
         <div>
-          Enter Game Guid:
-          <input id="gameGuid" type="text"
-                 onChange={this.handleGameGuidChange}/>
-          <td/>
+          {this.state.error && <div
+              style={{color: "red"}}>ERROR: {this.state.error}</div>}
           Enter Your name:
           <input id="playerName" type="text"
                  onChange={this.handlePlayerChange}/>
-          <td/>
+          <br/>
           Enter number of dices:
           <input type="text" onChange={this.handleChange}/>
-          <td/>
+          <br/>
           <button onClick={this.createPlayer}>Create Dices</button>
           <div>
             {this.state.start && this.state.numOfDices > 0 && <Dices
                 numberOfDices={this.state.numOfDices}
-                gameGuid={this.state.gameGuid} playerId={this.state.playerId}/>}
+                gameGuid={this.state.gameGuid}
+                playerId={this.state.playerId}/>}
           </div>
         </div>
     )
   }
 
   createPlayer = () => {
+    this.setState({
+      error: undefined
+    })
     const player = {
       gameGuid: this.state.gameGuid,
       name: this.state.playerName,
@@ -96,8 +99,10 @@ export default class Game extends React.Component {
       else {
         throw Error("Some Error!!!!")
       }
-    }).catch(function (response) {
-      alert(response.message);
+    }).catch((err) => {
+      this.setState({
+        error: err.message
+      })
     })
   }
 }
