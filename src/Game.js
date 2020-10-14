@@ -83,21 +83,19 @@ export default class Game extends React.Component {
           gameGuid: this.state.gameGuid,
           name: this.state.playerName,
           numberOfDices: this.state.numOfDices
-        }
-    ;
+        };
     API.post(
         'players', player
-    )
-    .then((response) => {
-      if (response.data) {
-        this.start(response.data.id)
-      }
-      else {
-        throw Error("Some Error!!!!")
-      }
-    })
-    .catch((e) => {
-      throw e;
-    })
+        )
+        .then((response) => {
+          if (response.data) {
+            this.start(response.data.id)
+          }
+          else {
+            throw Error("Some Error!!!!")
+          }
+        }).catch(function(response) {
+          alert(response.message);
+        })
   }
 }

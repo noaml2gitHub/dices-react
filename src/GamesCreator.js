@@ -73,10 +73,23 @@ export default class GamesCreator extends React.Component {
   }
 
   revealGame = (game) => {
+    return this.changeGameState(game, "APPROVE_TO_REVEAL");
+  };
+
+  resetGame = (game) => {
+    return API.delete(
+        'dices/' + game.guid,
+    ).then((response) => {
+      if (response.status == 200){
+        return this.changeGameState(game, "ACTIVE");
+      }
+    })
+  };
+
+  changeGameState = (game, state) => {
     const updateTo = {
-      state: "APPROVE_TO_REVEAL"
-    }
-    debugger
+      state: state
+    };
     return API.put(
         'games/'+ game.guid, updateTo
     ).then((response) => {
@@ -91,7 +104,7 @@ export default class GamesCreator extends React.Component {
         }
       }
     })
-  }
+  };
 
   render() {
     const {games} = this.state;
@@ -119,6 +132,9 @@ export default class GamesCreator extends React.Component {
                       </td>
                       <td>
                         <button onClick={()=>this.revealGame(game)}>Reveal</button>
+                      </td>
+                      <td>
+                        <button onClick={()=>this.resetGame(game)}>Init</button>
                       </td>
                     </tr>
               })
