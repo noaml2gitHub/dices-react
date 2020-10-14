@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import {HashRouter, Route} from "react-router-dom";
-import GamesCreator from "./GamesCreator";
-import Game from "./Game";
+import GamesCreator from "./creator/GamesCreator";
+import Game from "./game/Game";
 
 ReactDOM.render(
     <React.StrictMode>
