@@ -3,8 +3,13 @@ import 'react-dice-complete/dist/react-dice-complete.css'
 import "./css/game.css"
 import Dices from "./Dices";
 import API from "./API";
+import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
+import Container from "@material-ui/core/Container/Container";
+import Typography from "@material-ui/core/Typography/Typography";
+import TextField from "@material-ui/core/TextField/TextField";
+import Button from "@material-ui/core/Button/Button";
 
-export default class Game extends React.Component {
+export default class ManagerGame extends React.Component {
 
   constructor(props) {
     super(props);
@@ -44,26 +49,74 @@ export default class Game extends React.Component {
 
     return (
         <div>
-          <div>Hello {this.state.playerName}</div>
 
-          Enter number of dices for this round:
-          <select value={this.state.numOfDices} onChange={this.updateNumberOfDices}>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          <br/>
-          <button onClick={this.start} disabled={!this.state.start}>Start round</button>
-          <div>
-            {this.state.start && this.state.numOfDices > 0 && <Dices
-                numberOfDices={this.state.numOfDices}
-                gameGuid={this.state.gameGuid}
-                playerId={this.state.playerId}/>}
-          </div>
+          <CssBaseline/>
+          <Container maxWidth="sm">
+            <Typography variant="h3" gutterBottom>
+              Game Manager
+            </Typography>
+            <Typography component="div"
+                        style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
+              {this.state.error && <div
+                  style={{color: "red"}}>ERROR: {this.state.error}</div>}
+              <br/>
+
+              <Button variant={"contained"} onClick={this.createPlayer}>Reveal All Dices</Button>
+
+              <Button variant={"contained"} onClick={this.createPlayer}>Roll All Dices</Button>
+
+              <TextField
+                  onChange={this.handlePlayerChange}
+                  label="Enter Your name"
+                  id="outlined-size-small"
+                  variant="outlined"
+                  size="small"
+              />
+
+              <TextField
+                  onChange={this.handleChange}
+                  label="Enter number of dices"
+                  id="outlined-size-small"
+                  variant="outlined"
+                  size="small"
+              />
+
+              <Button variant={"contained"} onClick={this.createPlayer}>Create
+                Dices</Button>
+              <div>
+                {this.state.start && this.state.numOfDices > 0 && <Dices
+                    numberOfDices={this.state.numOfDices}
+                    gameGuid={this.state.gameGuid}
+                    playerId={this.state.playerId}/>}
+              </div>
+            </Typography>
+          </Container>
         </div>
     )
+
+
+    // return (
+    //     <div>
+    //       <div>Game Manager</div>
+    //
+    //       Enter number of dices for this round:
+    //       <select value={this.state.numOfDices} onChange={this.updateNumberOfDices}>
+    //         <option value="1">1</option>
+    //         <option value="2">2</option>
+    //         <option value="3">3</option>
+    //         <option value="4">4</option>
+    //         <option value="5">5</option>
+    //       </select>
+    //       <br/>
+    //       <button onClick={this.start} disabled={!this.state.start}>Start round</button>
+    //       <div>
+    //         {this.state.start && this.state.numOfDices > 0 && <Dices
+    //             numberOfDices={this.state.numOfDices}
+    //             gameGuid={this.state.gameGuid}
+    //             playerId={this.state.playerId}/>}
+    //       </div>
+    //     </div>
+    // )
   }
 
   createPlayer = (guid) => {
