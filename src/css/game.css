@@ -11,3 +11,8 @@ table, th, td {
 thead{
   background-color: gold;
 }
+
+.error input
+{
+  border-bottom: 1px solid #eb516d;
+}

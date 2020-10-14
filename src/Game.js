@@ -10,10 +10,10 @@ export default class Game extends React.Component {
     super(props);
     this.state = {
       gameGuid: undefined,
-      playerName: "",
+      playerName: this.getRandom(this.items),
+      playerId: 0,
       numOfDices: 0,
       start: false,
-      error: undefined
     }
   }
 
@@ -21,55 +21,41 @@ export default class Game extends React.Component {
     const {match: {params}} = this.props;
     this.setState({
       gameGuid: params.guid
-    })
+    });
+    this.createPlayer(params.guid);
   }
 
-  handlePlayerChange = (value) => {
-    this.setState({
-      playerName: value.target.value,
-      start: false
-    })
-  }
+  getRandom = (items) => {
+    return items[Math.floor(Math.random()*items.length)] +'_' + Math.floor((Date.now() / 1000) % 10000);
+  };
 
-  handleGameGuidChange = (value) => {
-    this.setState({
-      gameGuid: value.target.value,
-      start: false
-    })
-  }
+  items = ['Euclid', 'Pythagoreans', 'Archimedes', 'Kepler', 'Descartes', 'Pascal', 'Newton', 'Leibniz', 'Euler', 'Gauss'];
 
-  handleChange = (value) => {
-    this.setState({
-      numOfDices: value.target.value,
-      start: false
-    })
-  }
-
-  start = (playerId) => {
+  start = () => {
     this.setState({
       start: true,
-      playerId: playerId
     })
-  }
+  };
 
   render() {
-
     if (this.state.gameGuid === undefined) {
       return <div>NOT A VALID GAME</div>
     }
 
     return (
         <div>
-          {this.state.error && <div
-              style={{color: "red"}}>ERROR: {this.state.error}</div>}
-          Enter Your name:
-          <input id="playerName" type="text"
-                 onChange={this.handlePlayerChange}/>
+          <div>Hello {this.state.playerName}</div>
+
+          Enter number of dices for this round:
+          <select value={this.state.numOfDices} onChange={this.updateNumberOfDices}>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
           <br/>
-          Enter number of dices:
-          <input type="text" onChange={this.handleChange}/>
-          <br/>
-          <button onClick={this.createPlayer}>Create Dices</button>
+          <button onClick={this.start} disabled={!this.state.start}>Start round</button>
           <div>
             {this.state.start && this.state.numOfDices > 0 && <Dices
                 numberOfDices={this.state.numOfDices}
@@ -80,12 +66,9 @@ export default class Game extends React.Component {
     )
   }
 
-  createPlayer = () => {
-    this.setState({
-      error: undefined
-    })
+  createPlayer = (guid) => {
     const player = {
-      gameGuid: this.state.gameGuid,
+      gameGuid: guid,
       name: this.state.playerName,
       numberOfDices: this.state.numOfDices
     };
@@ -94,15 +77,32 @@ export default class Game extends React.Component {
     )
     .then((response) => {
       if (response.data) {
-        this.start(response.data.id)
+        this.setState({
+          playerId: response.data.id
+        })
       }
       else {
         throw Error("Some Error!!!!")
       }
     }).catch((err) => {
-      this.setState({
-        error: err.message
-      })
+      alert(err.message)
+    })
+  };
+
+  updateNumberOfDices = (value) => {
+    this.setState({
+      numOfDices: value.target.value,
+      start: false
+    });
+
+    const player = {
+      numberOfDices: this.state.numOfDices
+    };
+    API.put(
+        'players/'+this.state.playerId, player
+    )
+    .catch((err) => {
+      alert(err.message)
     })
   }
 }

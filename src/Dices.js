@@ -13,11 +13,11 @@ export default class Dices extends React.Component {
       gameGuid: props.gameGuid,
       playerId: props.playerId,
       distribution: []
-    }
+    };
+    this.rollAll();
   }
 
   render() {
-    debugger
     return (
         <div>
           <ReactDice
@@ -74,6 +74,7 @@ export default class Dices extends React.Component {
   }
 
   rollAll() {
+    debugger;
     const dice = {
       gameGuid: this.state.gameGuid,
       playerId: this.state.playerId
@@ -88,7 +89,7 @@ export default class Dices extends React.Component {
           values.push(dice.value);
           return values;
         });
-        this.reactDice.rollAll(values)
+        this.reactDice.rollAll(values);
       }
       else {
         throw Error("Some Error!!!!")
