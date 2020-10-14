@@ -52,50 +52,52 @@ export default class Game extends React.Component {
   }
 
   render() {
-    return (
-    if (this.state.guid == undefined) {
+
+    if (this.state.guid === undefined) {
       return <div>NOT A VALID GAME</div>
     }
-    <div>
-      Enter Game Guid:
-      <input id="gameGuid" type="text"
-             onChange={this.handleGameGuidChange}/>
-      <td/>
-      Enter Your name:
-      <input id="playerName" type="text"
-             onChange={this.handlePlayerChange}/>
-      <td/>
-      Enter number of dices:
-      <input type="text" onChange={this.handleChange}/>
-      <td/>
-      <button onClick={this.createPlayer}>Create Dices</button>
-      <div>
-        {this.state.start && this.state.numOfDices > 0 && <Dices
-            numberOfDices={this.state.numOfDices}
-            gameGuid={this.state.gameGuid} playerId={this.state.playerId}/>}
-      </div>
-    </div>
-  )
+
+    return (
+        <div>
+          Enter Game Guid:
+          <input id="gameGuid" type="text"
+                 onChange={this.handleGameGuidChange}/>
+          <td/>
+          Enter Your name:
+          <input id="playerName" type="text"
+                 onChange={this.handlePlayerChange}/>
+          <td/>
+          Enter number of dices:
+          <input type="text" onChange={this.handleChange}/>
+          <td/>
+          <button onClick={this.createPlayer}>Create Dices</button>
+          <div>
+            {this.state.start && this.state.numOfDices > 0 && <Dices
+                numberOfDices={this.state.numOfDices}
+                gameGuid={this.state.gameGuid} playerId={this.state.playerId}/>}
+          </div>
+        </div>
+    )
   }
 
   createPlayer = () => {
     const player = {
-          gameGuid: this.state.gameGuid,
-          name: this.state.playerName,
-          numberOfDices: this.state.numOfDices
-        };
+      gameGuid: this.state.gameGuid,
+      name: this.state.playerName,
+      numberOfDices: this.state.numOfDices
+    };
     API.post(
         'players', player
-        )
-        .then((response) => {
-          if (response.data) {
-            this.start(response.data.id)
-          }
-          else {
-            throw Error("Some Error!!!!")
-          }
-        }).catch(function(response) {
-          alert(response.message);
-        })
+    )
+    .then((response) => {
+      if (response.data) {
+        this.start(response.data.id)
+      }
+      else {
+        throw Error("Some Error!!!!")
+      }
+    }).catch(function (response) {
+      alert(response.message);
+    })
   }
 }
