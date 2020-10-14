@@ -10,7 +10,7 @@ export default class GamesCreator extends React.Component {
     this.state = {
       games: []
     };
-  //  this.getAllGames();
+   this.getAllGames();
   }
 
   createGame = () => {
@@ -79,7 +79,7 @@ export default class GamesCreator extends React.Component {
     return API.delete(
         'dices/' + game.guid,
     ).then((response) => {
-      if (response.status == 200){
+      if (response.status === 200){
         return this.changeGameState(game, "ACTIVE");
       }
     })
