@@ -9,11 +9,18 @@ export default class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      gameGuid: props.gameGuid,
+      gameGuid: undefined,
       playerName: "",
       numOfDices: 0,
       start: false
     }
+  }
+
+  componentDidMount() {
+    const {match: {params}} = this.props;
+    this.setState({
+      gameGuid: params.guid
+    })
   }
 
   handlePlayerChange = (value) => {
@@ -46,23 +53,29 @@ export default class Game extends React.Component {
 
   render() {
     return (
-        <div>
-          Enter Game Guid:
-          <input id="gameGuid" type="text" onChange={this.handleGameGuidChange}/>
-          <td/>
-          Enter Your name:
-          <input id="playerName" type="text" onChange={this.handlePlayerChange}/>
-          <td/>
-          Enter number of dices:
-          <input type="text" onChange={this.handleChange}/>
-          <td/>
-          <button onClick={this.createPlayer}>Create Dices</button>
-          <div>
-            {this.state.start && this.state.numOfDices > 0 && <Dices
-                numberOfDices={this.state.numOfDices} gameGuid={this.state.gameGuid} playerId={this.state.playerId}/>}
-          </div>
-        </div>
-    )
+    if (this.state.guid == undefined) {
+      return <div>NOT A VALID GAME</div>
+    }
+    <div>
+      Enter Game Guid:
+      <input id="gameGuid" type="text"
+             onChange={this.handleGameGuidChange}/>
+      <td/>
+      Enter Your name:
+      <input id="playerName" type="text"
+             onChange={this.handlePlayerChange}/>
+      <td/>
+      Enter number of dices:
+      <input type="text" onChange={this.handleChange}/>
+      <td/>
+      <button onClick={this.createPlayer}>Create Dices</button>
+      <div>
+        {this.state.start && this.state.numOfDices > 0 && <Dices
+            numberOfDices={this.state.numOfDices}
+            gameGuid={this.state.gameGuid} playerId={this.state.playerId}/>}
+      </div>
+    </div>
+  )
   }
 
   createPlayer = () => {
@@ -74,17 +87,17 @@ export default class Game extends React.Component {
     ;
     API.post(
         'players', player
-        )
-        .then((response) => {
-          if (response.data) {
-            this.start(response.data.id)
-          }
-          else {
-            throw Error("Some Error!!!!")
-          }
-        })
-        .catch((e) => {
-          throw e;
-        })
+    )
+    .then((response) => {
+      if (response.data) {
+        this.start(response.data.id)
+      }
+      else {
+        throw Error("Some Error!!!!")
+      }
+    })
+    .catch((e) => {
+      throw e;
+    })
   }
 }
