@@ -21,28 +21,28 @@ export default class Game extends React.Component {
       playerName: value.target.value,
       start: false
     })
-  }
+  };
 
   handleGameGuidChange = (value) => {
     this.setState({
-      gameGuid: value.target.value,
+      gameGuid: value.target.value.trim(),
       start: false
     })
-  }
+  };
 
   handleChange = (value) => {
     this.setState({
       numOfDices: value.target.value,
       start: false
     })
-  }
+  };
 
   start = (playerId) => {
     this.setState({
       start: true,
       playerId: playerId
     })
-  }
+  };
 
   render() {
     return (
@@ -70,8 +70,7 @@ export default class Game extends React.Component {
           gameGuid: this.state.gameGuid,
           name: this.state.playerName,
           numberOfDices: this.state.numOfDices
-        }
-    ;
+        };
     API.post(
         'players', player
         )
@@ -82,9 +81,8 @@ export default class Game extends React.Component {
           else {
             throw Error("Some Error!!!!")
           }
-        })
-        .catch((e) => {
-          throw e;
+        }).catch(function(response) {
+          alert(response.message);
         })
   }
 }

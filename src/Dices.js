@@ -27,7 +27,7 @@ export default class Dices extends React.Component {
               disableIndividual={true}
               ref={dice => this.reactDice = dice}
           />
-          <button onClick={() => this.rollAll()} disabled={this.state.rolled}>Roll the dices</button>
+          <button onClick={() => this.rollAll()}>Roll the dices</button>
           <button onClick={() => this.revealAll()} hidden={!this.state.rolled}>Reveal All Dices Distribution</button>
           <table>
             <thead>
@@ -67,7 +67,10 @@ export default class Dices extends React.Component {
           distribution: distribution
         });
       }
+    }).catch(function(response) {
+      alert(response.message);
     })
+
   }
 
   rollAll() {
@@ -90,10 +93,9 @@ export default class Dices extends React.Component {
       else {
         throw Error("Some Error!!!!")
       }
-    })
-    .catch((e) => {
-      throw e;
-    })
+    }).catch(function(response) {
+      alert(response.message);
+    });
     this.setState({
       rolled: true
     })
