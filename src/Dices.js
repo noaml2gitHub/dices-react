@@ -62,7 +62,6 @@ export default class Dices extends React.Component {
       if (response.data) {
         let arr = response.data;
         let distribution = this.groupBy(arr, 'value');
-        debugger;
         this.setState({
           distribution: distribution
         });
@@ -74,7 +73,6 @@ export default class Dices extends React.Component {
   }
 
   rollAll() {
-    debugger;
     const dice = {
       gameGuid: this.state.gameGuid,
       playerId: this.state.playerId

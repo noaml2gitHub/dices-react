@@ -94,7 +94,6 @@ export default class Dices extends React.Component {
       if (response.data) {
         let arr = response.data;
         let distribution = this.groupBy(arr, 'value');
-        debugger;
         this.setState({
           distribution: distribution
         });

@@ -8,6 +8,7 @@ import ButtonGroup from "@material-ui/core/ButtonGroup/ButtonGroup";
 import Button from "@material-ui/core/Button/Button";
 import GamesTable from "./GamesTable";
 import {createGame, getAllGames} from "../service/gameSevice";
+import ManagerGame from "../manager/ManagerGame";
 
 export default class GamesCreator extends React.Component {
 
@@ -17,16 +18,15 @@ export default class GamesCreator extends React.Component {
       games: [],
       error: undefined
     };
-
   }
 
   createGame = async () => {
     this.setState({
       error: undefined
-    })
+    });
     try {
       let arr = this.state.games;
-      arr.push(await createGame())
+      arr.push(await createGame());
       this.setState({
         games: arr
       })
@@ -37,12 +37,12 @@ export default class GamesCreator extends React.Component {
       })
     }
 
-  }
+  };
 
   getAllGames = async () => {
     this.setState({
       error: undefined
-    })
+    });
     try {
       this.setState({
         games: await getAllGames()
@@ -53,8 +53,7 @@ export default class GamesCreator extends React.Component {
         error: e.message
       })
     }
-
-  }
+  };
 
   render() {
     return (
@@ -73,8 +72,7 @@ export default class GamesCreator extends React.Component {
               <ButtonGroup color="primary"
                            aria-label="outlined primary button group">
                 <Button onClick={() => this.createGame()}>Add Game</Button>
-                <Button onClick={() => this.getAllGames()}>Get All
-                  Games</Button>
+                <Button onClick={() => this.getAllGames()}>Get All Games</Button>
               </ButtonGroup>
 
               {this.state.games.length > 0 && <GamesTable
@@ -83,7 +81,6 @@ export default class GamesCreator extends React.Component {
             </Typography>
           </Container>
         </div>
-
     )
   }
 }

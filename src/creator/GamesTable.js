@@ -26,7 +26,7 @@ export default class GamesTable extends React.Component {
     this.setState({
       games: await deleteGame(game, this.state.games)
     });
-  }
+  };
 
   revealGame = (game) => {
     return this.changeGameState(game, "APPROVE_TO_REVEAL");
@@ -42,7 +42,7 @@ export default class GamesTable extends React.Component {
     this.setState({
       games: await changeGameState(game, state, this.state.games)
     })
-  }
+  };
 
   render() {
     const {games} = this.state;

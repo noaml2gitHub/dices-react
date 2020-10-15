@@ -34,7 +34,7 @@ export let getAllGames = () => {
   .catch((e) => {
     throw e;
   })
-}
+};
 
 export let deleteGame = (game, games) => {
   return API.delete(
