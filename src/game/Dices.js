@@ -40,7 +40,6 @@ export default class Dices extends React.Component {
   render() {
 
     const images = [one, two, three, four, five, six];
-    debugger
     return (
         <div>
           <ReactDice

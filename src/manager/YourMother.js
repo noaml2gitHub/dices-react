@@ -1,8 +1,6 @@
 import * as React from "react";
 import 'react-dice-complete/dist/react-dice-complete.css'
 import "../css/game.css"
-import ButtonGroup from "@material-ui/core/ButtonGroup/ButtonGroup";
-import Button from "@material-ui/core/Button/Button";
 import TableContainer from "@material-ui/core/TableContainer/TableContainer";
 import Table from "@material-ui/core/Table/Table";
 import {Paper} from "@material-ui/core";
@@ -36,7 +34,6 @@ export default class YourMother extends React.Component {
   }
 
   render() {
-    debugger;
     const {players} = this.state;
     return (
         <div>
@@ -69,7 +66,6 @@ export default class YourMother extends React.Component {
                 }
               </TableBody>
             </Table>
-
           </TableContainer>
           }
         </div>
@@ -95,11 +91,11 @@ export default class YourMother extends React.Component {
   };
 
   getIndex = (arr, prop, value) => {
-    for(var i = 0; i < arr.length; i++) {
+    for(let i = 0; i < arr.length; i++) {
       if(arr[i][prop] === value) {
         return i;
       }
     }
-    return -1; //to handle the case where the value doesn't exist
+    return -1;
   }
 }

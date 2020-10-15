@@ -5,9 +5,23 @@ import API from "../service/API";
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Container from "@material-ui/core/Container/Container";
 import Typography from "@material-ui/core/Typography/Typography";
-import TextField from "@material-ui/core/TextField/TextField";
 import Button from "@material-ui/core/Button/Button";
 import YourMother from "./YourMother";
+import {resetGameByGuid} from "../service/gameSevice";
+import TableContainer from "@material-ui/core/TableContainer/TableContainer";
+import {Paper} from "@material-ui/core";
+import Table from "@material-ui/core/Table/Table";
+import TableHead from "@material-ui/core/TableHead/TableHead";
+import TableRow from "@material-ui/core/TableRow/TableRow";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import TableBody from "@material-ui/core/TableBody/TableBody";
+import one from '../images/one.png';
+import two from '../images/two.png';
+import three from '../images/three.png';
+import four from '../images/four.png';
+import five from '../images/five.png';
+import six from '../images/six.png';
+
 
 export default class ManagerGame extends React.Component {
 
@@ -17,15 +31,13 @@ export default class ManagerGame extends React.Component {
       gameGuid: this.props.match.params.guid,
       error: "",
       dices: [],
-      players: []
-      // playerName: this.getRandom(this.items),
-      // numOfDices: 0,
-      // start: false,
+      players: [],
+      reveal: false,
+      distribution: []
     }
   }
 
   componentDidMount() {
-    debugger;
     const {match: {params}} = this.props;
     this.setState({
       gameGuid: params.guid
@@ -53,12 +65,11 @@ export default class ManagerGame extends React.Component {
   // };
 
   render() {
-    debugger;
-    let a = this.props.match.params.guid;
     if (this.state.gameGuid === undefined) {
       return <div>NOT A VALID GAME</div>
     }
 
+    const images = [one, two, three, four, five, six];
     return (
         <div>
 
@@ -80,29 +91,87 @@ export default class ManagerGame extends React.Component {
 
               {this.state.players.length > 0 && <YourMother
                   players={this.state.players} dices={this.state.dices}/>}
-              </Typography>
+
+              {this.state.reveal && <TableContainer component={Paper}>
+                <Table style={{minWidth: "650"}} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      {images.map(image => {
+                        return <TableCell><img src={image} style={{
+                          height: "50px",
+                          width: "50px"
+                        }}/></TableCell>
+                      })}
+                    </TableRow>
+                  </TableHead>
+
+                  <TableBody>
+                    <TableRow>
+                      {
+                        [1, 2, 3, 4, 5, 6].map(dice => {
+                          return <TableCell> {this.getDistribution(dice)}</TableCell>
+                        })
+                      }
+                    </TableRow>
+                  </TableBody>
+                </Table>
+
+              </TableContainer>}
+
+            </Typography>
           </Container>
         </div>
     )
   }
 
+  getDistribution = (idx) => {
+    return this.state.distribution[idx]
+        ? this.state.distribution[idx].length : 0
+  };
+
+  removeErrorMsg = () => {
+    this.setState({
+      error: ""
+    })
+  };
+
   getAllDices = () => {
-    API.get(
-        'dices?gameGuid=' + this.state.gameGuid,
-    ).then((response)=>{
-      if (response.data) {
-        this.setState({
-          dices: this.groupBy(response.data, 'playerId', 'value')
-        });
+    debugger;
+    this.removeErrorMsg();
+
+    const body = {
+      state: "APPROVE_TO_REVEAL"
+    };
+    API.put(
+        'games/'+this.state.gameGuid, body
+    ).then((response) => {
+      if (response.data){
+        API.get(
+            'dices?gameGuid=' + this.state.gameGuid,
+        ).then((response)=>{
+          if (response.data) {
+            this.setState({
+              dices: this.groupByAllPlayersResults(response.data, 'playerId', 'value'),
+              distribution: this.groupBy(response.data, 'value'),
+              reveal: true
+            });
+          }
+        }).catch((err) => {
+          this.setState({
+            error: err.message
+          })
+        })
       }
     }).catch((err) => {
       this.setState({
         error: err.message
       })
-    })
+    });
   };
 
   getAllPlayers = () => {
+    this.removeErrorMsg();
+
     API.get(
         'players?gameGuid=' + this.state.gameGuid,
     ).then((response)=>{
@@ -117,51 +186,49 @@ export default class ManagerGame extends React.Component {
   };
 
   rollAllDices = () => {
+    this.removeErrorMsg();
+
     debugger;
     if (this.state.players){
-      for (const player of this.state.players) {
-        const body = {
-              gameGuid: this.state.gameGuid,
-              playerId: player.id
-            };
-        API.post(
-            'dices', body
-        ).then((response) => {
-          if (response.data) {
-            let arr = response.data;
-            let values = [];
-            arr.map((dice) => {
-              values.push(dice.value);
-              return values;
-            });
-            let copyOfDices = this.state.dices;
-            copyOfDices.push(player.id, values);
-            this.setState({
-              dices: copyOfDices
-            })
+      const body = {
+        gameGuid: this.state.gameGuid,
+      };
+      API.post(
+          'dices', body
+      )/*.then((response) => {
+        if (response.data){
+          let obfuscated = [];
+          for (const player of this.state.players) {
+            obfuscated.push(player.id, []);
+            for (let i=0; i<player.numberOfDices; i++) {
+              obfuscated[player.id].push(i, '*');
+            }
           }
-          else {
-            throw Error("Some Error!!!!")
-          }
+          this.setState({
+            dices: obfuscated
+          })
+        }
+      })*/.catch((err)=>{
+        this.setState({
+          error: err.message
         })
-      }
+      });
     }
   };
 
   initGame = () => {
-    API.delete(
-        'dices/' + this.state.gameGuid
-    ).then((response) => {
-      this.setState({
-        dices: []
-      })
+    this.removeErrorMsg();
+
+    resetGameByGuid(this.state.gameGuid);
+    this.setState({
+      dices: [],
+      reveal: false,
+      distribution: []
     })
-    /*NOAM - Update game state to ACTIVE
-    * And make table to be updated BLAT */
   };
 
-  groupBy(OurArray, mapBy, value) {
-    return OurArray.reduce(function (accumulator, object) {
+  groupByAllPlayersResults(OurArray, mapBy, value) {
+    return OurArray.reduce((accumulator, object) => {
       const key = object[mapBy];
       if (!accumulator[key]) {
         accumulator[key] = [];
@@ -170,4 +237,16 @@ export default class ManagerGame extends React.Component {
       return accumulator;
     }, []);
   }
+
+  groupBy(OurArray, property) {
+    return OurArray.reduce(function (accumulator, object) {
+      const key = object[property];
+      if (!accumulator[key]) {
+        accumulator[key] = [];
+      }
+      accumulator[key].push(object);
+      return accumulator;
+    }, []);
+  }
+
 }
