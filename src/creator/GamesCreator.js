@@ -17,6 +17,7 @@ export default class GamesCreator extends React.Component {
       games: [],
       error: undefined
     };
+    this.getAllGames();
   }
 
   createGame = async () => {

@@ -72,10 +72,11 @@ export default class ManagerGame extends React.Component {
                   style={{color: "red"}}>ERROR: {this.state.error}</div>}
               <br/>
 
+              <Button variant={"contained"} onClick={this.initGame}>New Round</Button>
+              <br/>
               <Button variant={"contained"} onClick={this.getAllDices}>Reveal All Dices</Button>
               <Button variant={"contained"} onClick={this.getAllPlayers}>Update players list</Button>
               <Button variant={"contained"} onClick={this.rollAllDices}>Roll All Dices</Button>
-              <Button variant={"contained"} onClick={this.initGame}>New Round</Button>
 
               {this.state.players.length > 0 && <PlayersTable
                   players={this.state.players} dices={this.state.dices}/>}
@@ -165,7 +166,6 @@ export default class ManagerGame extends React.Component {
     API.get(
         'players?gameGuid=' + this.state.gameGuid,
     ).then(async (response)=>{
-      debugger;
       let players = await response.data;
       this.setState({
           players: players
@@ -180,7 +180,6 @@ export default class ManagerGame extends React.Component {
   rollAllDices = () => {
     this.removeErrorMsg();
 
-    debugger;
     if (this.state.players){
       const body = {
         gameGuid: this.state.gameGuid,

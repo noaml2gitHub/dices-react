@@ -16,6 +16,7 @@ import four from '../images/four.png';
 import five from '../images/five.png';
 import six from '../images/six.png';
 import qmark from '../images/question.png';
+import del from '../images/delete.png';
 
 export default class PlayersTable extends React.Component {
 
@@ -52,6 +53,7 @@ export default class PlayersTable extends React.Component {
                   <TableCell>Player Name</TableCell>
                   <TableCell>Number Of Dices</TableCell>
                   <TableCell>Player's Dices</TableCell>
+                  <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -69,6 +71,7 @@ export default class PlayersTable extends React.Component {
                         </select>
                       </TableCell>
                       <TableCell>{this.paintDices(player.id)}</TableCell>
+                      <TableCell><button><img alt={""} src={del} style={{width:"25px"}} onClick={() => this.deletePlayer(player)}/></button></TableCell>
                     </TableRow>
                   })
                 }
@@ -80,32 +83,51 @@ export default class PlayersTable extends React.Component {
     )
   }
 
+  deletePlayer = (player) => {
+    let confirm = window.confirm("Are you sure you want to delete " + player.name + "?");
+    if (confirm){
+      API.delete(
+          'players/' + player.id
+      ).then((response) => {
+        let copy = this.state.players;
+        let index = this.getIndex(copy, 'id', player.id);
+        if (index !== -1){
+          copy.splice(index, 1);
+          this.setState({
+            players: copy
+          })
+        }
+      })
+    }
+  };
+
   paintDices = (playerId) => {
+    debugger;
     if (this.state.dices && Object.keys(this.state.dices).length > 0 && this.state.dices[playerId]){
       debugger;
       let images = [];
       for (let i=0; i<this.state.dices[playerId].length; i++){
          switch (this.state.dices[playerId][i]) {
            case 1:
-            images.push(<img alt="" src={one} style={{width:"50px"}}/>);
+            images.push(<img alt="" src={one} style={{width:"25px"}}/>);
             break;
            case 2:
-             images.push(<img alt="" src={two} style={{width:"50px"}}/>);
+             images.push(<img alt="" src={two} style={{width:"25px"}}/>);
              break;
            case 3:
-             images.push(<img alt="" src={three} style={{width:"50px"}}/>);
+             images.push(<img alt="" src={three} style={{width:"25px"}}/>);
              break;
            case 4:
-             images.push(<img alt="" src={four} style={{width:"50px"}}/>);
+             images.push(<img alt="" src={four} style={{width:"25px"}}/>);
              break;
            case 5:
-             images.push(<img alt="" src={five} style={{width:"50px"}}/>);
+             images.push(<img alt="" src={five} style={{width:"25px"}}/>);
              break;
            case 6:
-             images.push(<img alt="" src={six} style={{width:"50px"}}/>);
+             images.push(<img alt="" src={six} style={{width:"25px"}}/>);
              break;
-           case '*':
-             images.push(<img alt="" src={qmark} style={{width:"50px"}}/>);
+           default:
+             images.push(<img alt="" src={qmark} style={{width:"25px"}}/>);
              break;
          }
       }
