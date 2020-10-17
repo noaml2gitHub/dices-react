@@ -41,6 +41,7 @@ export default class ManagerGame extends React.Component {
     this.setState({
       gameGuid: params.guid
     });
+    this.getAllPlayers()
   }
 
   componentDidUpdate(prevProps, prevState) {

@@ -15,6 +15,7 @@ import three from '../images/three.png';
 import four from '../images/four.png';
 import five from '../images/five.png';
 import six from '../images/six.png';
+import qmark from '../images/question.png';
 
 export default class PlayersTable extends React.Component {
 
@@ -67,7 +68,7 @@ export default class PlayersTable extends React.Component {
                           <option value="5">5</option>
                         </select>
                       </TableCell>
-                      <TableCell>{this.state.dices && Object.keys(this.state.dices).length > 0 && this.state.dices[player.id] && this.state.dices[player.id].join(" ")}</TableCell>
+                      <TableCell>{this.paintDices(player.id)}</TableCell>
                     </TableRow>
                   })
                 }
@@ -78,6 +79,39 @@ export default class PlayersTable extends React.Component {
         </div>
     )
   }
+
+  paintDices = (playerId) => {
+    if (this.state.dices && Object.keys(this.state.dices).length > 0 && this.state.dices[playerId]){
+      debugger;
+      let images = [];
+      for (let i=0; i<this.state.dices[playerId].length; i++){
+         switch (this.state.dices[playerId][i]) {
+           case 1:
+            images.push(<img alt="" src={one} style={{width:"50px"}}/>);
+            break;
+           case 2:
+             images.push(<img alt="" src={two} style={{width:"50px"}}/>);
+             break;
+           case 3:
+             images.push(<img alt="" src={three} style={{width:"50px"}}/>);
+             break;
+           case 4:
+             images.push(<img alt="" src={four} style={{width:"50px"}}/>);
+             break;
+           case 5:
+             images.push(<img alt="" src={five} style={{width:"50px"}}/>);
+             break;
+           case 6:
+             images.push(<img alt="" src={six} style={{width:"50px"}}/>);
+             break;
+           case '*':
+             images.push(<img alt="" src={qmark} style={{width:"50px"}}/>);
+             break;
+         }
+      }
+      return (<div>{images}</div>)
+    }
+  };
 
   updateNumberOfDices = (player, num) => {
     const body = {
