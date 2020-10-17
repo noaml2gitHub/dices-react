@@ -6,7 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Container from "@material-ui/core/Container/Container";
 import Typography from "@material-ui/core/Typography/Typography";
 import Button from "@material-ui/core/Button/Button";
-import YourMother from "./YourMother";
+import PlayersTable from "./PlayerTable";
 import {resetGameByGuid} from "../service/gameSevice";
 import TableContainer from "@material-ui/core/TableContainer/TableContainer";
 import {Paper} from "@material-ui/core";
@@ -22,7 +22,6 @@ import four from '../images/four.png';
 import five from '../images/five.png';
 import six from '../images/six.png';
 
-
 export default class ManagerGame extends React.Component {
 
   constructor(props) {
@@ -30,7 +29,7 @@ export default class ManagerGame extends React.Component {
     this.state = {
       gameGuid: this.props.match.params.guid,
       error: "",
-      dices: [],
+      dices: {},
       players: [],
       reveal: false,
       distribution: []
@@ -51,18 +50,6 @@ export default class ManagerGame extends React.Component {
       })
     }
   }
-
-    // getRandom = (items) => {
-  //   return items[Math.floor(Math.random()*items.length)] +'_' + Math.floor((Date.now() / 1000) % 10000);
-  // };
-
-  // items = ['Euclid', 'Pythagoreans', 'Archimedes', 'Kepler', 'Descartes', 'Pascal', 'Newton', 'Leibniz', 'Euler', 'Gauss'];
-
-  // start = () => {
-  //   this.setState({
-  //     start: true,
-  //   })
-  // };
 
   render() {
     if (this.state.gameGuid === undefined) {
@@ -89,7 +76,7 @@ export default class ManagerGame extends React.Component {
               <Button variant={"contained"} onClick={this.rollAllDices}>Roll All Dices</Button>
               <Button variant={"contained"} onClick={this.initGame}>New Round</Button>
 
-              {this.state.players.length > 0 && <YourMother
+              {this.state.players.length > 0 && <PlayersTable
                   players={this.state.players} dices={this.state.dices}/>}
 
               {this.state.reveal && <TableContainer component={Paper}>
@@ -97,10 +84,12 @@ export default class ManagerGame extends React.Component {
                   <TableHead>
                     <TableRow>
                       {images.map(image => {
-                        return <TableCell><img src={image} style={{
+                        return <TableCell>
+                          <img alt={"Nothing"} src={image} style={{
                           height: "50px",
                           width: "50px"
-                        }}/></TableCell>
+                        }}/>
+                        </TableCell>
                       })}
                     </TableRow>
                   </TableHead>
@@ -136,7 +125,6 @@ export default class ManagerGame extends React.Component {
   };
 
   getAllDices = () => {
-    debugger;
     this.removeErrorMsg();
 
     const body = {
@@ -150,8 +138,9 @@ export default class ManagerGame extends React.Component {
             'dices?gameGuid=' + this.state.gameGuid,
         ).then((response)=>{
           if (response.data) {
+            let dices = this.groupByAllPlayersResults(response.data, 'playerId', 'value');
             this.setState({
-              dices: this.groupByAllPlayersResults(response.data, 'playerId', 'value'),
+              dices: dices,
               distribution: this.groupBy(response.data, 'value'),
               reveal: true
             });
@@ -174,9 +163,11 @@ export default class ManagerGame extends React.Component {
 
     API.get(
         'players?gameGuid=' + this.state.gameGuid,
-    ).then((response)=>{
-        this.setState({
-          players: response.data
+    ).then(async (response)=>{
+      debugger;
+      let players = await response.data;
+      this.setState({
+          players: players
         });
     }).catch((err) => {
       this.setState({
@@ -195,20 +186,22 @@ export default class ManagerGame extends React.Component {
       };
       API.post(
           'dices', body
-      )/*.then((response) => {
+      ).then((response) => {
         if (response.data){
-          let obfuscated = [];
+          let obfuscated = {};
           for (const player of this.state.players) {
-            obfuscated.push(player.id, []);
             for (let i=0; i<player.numberOfDices; i++) {
-              obfuscated[player.id].push(i, '*');
+              if (!obfuscated[player.id]){
+                obfuscated[player.id] = [];
+              }
+              obfuscated[player.id].push('*');
             }
           }
           this.setState({
             dices: obfuscated
           })
         }
-      })*/.catch((err)=>{
+      }).catch((err)=>{
         this.setState({
           error: err.message
         })
@@ -221,7 +214,7 @@ export default class ManagerGame extends React.Component {
 
     resetGameByGuid(this.state.gameGuid);
     this.setState({
-      dices: [],
+      dices: {},
       reveal: false,
       distribution: []
     })

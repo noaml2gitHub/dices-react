@@ -8,7 +8,6 @@ import ButtonGroup from "@material-ui/core/ButtonGroup/ButtonGroup";
 import Button from "@material-ui/core/Button/Button";
 import GamesTable from "./GamesTable";
 import {createGame, getAllGames} from "../service/gameSevice";
-import ManagerGame from "../manager/ManagerGame";
 
 export default class GamesCreator extends React.Component {
 
