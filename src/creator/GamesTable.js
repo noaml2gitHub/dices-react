@@ -11,6 +11,7 @@ import TableBody from "@material-ui/core/TableBody/TableBody";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableHead from "@material-ui/core/TableHead/TableHead";
 import {changeGameState, deleteGame, resetGame} from "../service/gameSevice";
+import {Link} from "react-router-dom";
 
 export default class GamesTable extends React.Component {
 
@@ -26,7 +27,7 @@ export default class GamesTable extends React.Component {
     this.setState({
       games: await deleteGame(game, this.state.games)
     });
-  }
+  };
 
   revealGame = (game) => {
     return this.changeGameState(game, "APPROVE_TO_REVEAL");
@@ -42,7 +43,7 @@ export default class GamesTable extends React.Component {
     this.setState({
       games: await changeGameState(game, state, this.state.games)
     })
-  }
+  };
 
   render() {
     const {games} = this.state;
@@ -61,7 +62,7 @@ export default class GamesTable extends React.Component {
                 {
                   games && games.map(game => {
                     return <TableRow>
-                      <TableCell>{game.guid}</TableCell>
+                      <TableCell><Link to={"/game/"+game.guid}>{game.guid}</Link></TableCell>
                       <TableCell>{game.state}</TableCell>
                       <TableCell>
                         <ButtonGroup color="primary"

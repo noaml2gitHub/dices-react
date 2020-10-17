@@ -16,7 +16,7 @@ export let createGame = async () => {
   .catch((e) => {
     throw e;
   })
-}
+};
 
 export let getAllGames = () => {
   return API.get(
@@ -34,7 +34,7 @@ export let getAllGames = () => {
   .catch((e) => {
     throw e;
   })
-}
+};
 
 export let deleteGame = (game, games) => {
   return API.delete(
@@ -47,13 +47,32 @@ export let deleteGame = (game, games) => {
       return arr;
     }
   })
-}
+};
+
+export let resetGameByGuid = (gameGuid) => {
+  return API.delete(
+      'dices/' + gameGuid,
+  ).then((response) => {
+    if (response.status === 200) {
+      return changeGameStateByGuid(gameGuid, "ACTIVE");
+    }
+  })
+};
+
+export let changeGameStateByGuid = (gameGuid, state) => {
+  const updateTo = {
+    state: state
+  };
+  return API.put(
+      'games/' + gameGuid, updateTo
+  );
+};
 
 export let resetGame = (game, games) => {
   return API.delete(
       'dices/' + game.guid,
   ).then((response) => {
-    if (response.status == 200) {
+    if (response.status === 200) {
       return changeGameState(game, "ACTIVE", games);
     }
   })
