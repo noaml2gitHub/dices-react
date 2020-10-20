@@ -7,6 +7,8 @@ import Button from "@material-ui/core/Button/Button";
 import API from "../service/API";
 import ReactDice from "react-dice-complete";
 import 'react-dice-complete/dist/react-dice-complete.css'
+import logo from "../images/logo.png";
+import smallLogo from "../images/small-logo.png";
 
 export default class Player extends React.Component {
 
@@ -70,11 +72,16 @@ export default class Player extends React.Component {
     }
 
     return (
-        <div style={{textAlign: "center"}}>
-        {this.state.error && <div
+        <div class="row" style={{textAlign: "center"}}>
+          <div className="right" style={{textAlign: "right"}}>
+            <a href={"https://yuni.co.il/"}> <img src={logo} alt="Logo"
+                                                  width={"92%"}/></a>
+          </div>
+
+          {this.state.error && <div
             style={{color: "red"}}>ERROR: {this.state.error}</div>}
         <CssBaseline/>
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <Typography component="div"
                       style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
             <Typography variant="h3" gutterBottom style={{marginTop: "10px"}}>
@@ -99,7 +106,10 @@ export default class Player extends React.Component {
             </div>
           </Typography>
         </Container>
-      </div>
+          <div className="footer">
+            <p> <img src={smallLogo} height={"20px"} width={"20px"} alt={""}/>    האתר נכתב על ידי נעם לידני עבור </p>
+          </div>
+        </div>
     )
   }
 

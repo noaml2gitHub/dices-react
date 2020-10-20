@@ -37,6 +37,7 @@ export default class GamesTable extends React.Component {
               <TableHead>
                 <TableRow>
                   <TableCell><strong>מזהה</strong></TableCell>
+                  <TableCell><strong>שם</strong></TableCell>
                   <TableCell><strong>מצב</strong></TableCell>
                   <TableCell><strong>פעולות</strong></TableCell>
                 </TableRow>
@@ -46,6 +47,7 @@ export default class GamesTable extends React.Component {
                   games && games.map(game => {
                     return <TableRow>
                       <TableCell><Link to={"/game/"+game.guid}>{game.guid}</Link></TableCell>
+                      <TableCell>{game.name}</TableCell>
                       <TableCell>{game.state}</TableCell>
                       <TableCell>
                         <button><img alt={""} src={del} style={{width:"25px"}} onClick={() => this.deleteGame(game)}/></button></TableCell>

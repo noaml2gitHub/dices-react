@@ -1,6 +1,7 @@
 import * as React from "react";
 import 'react-dice-complete/dist/react-dice-complete.css'
 import "../css/game.css"
+import "../css/page.css"
 import API from "../service/API";
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Container from "@material-ui/core/Container/Container";
@@ -22,6 +23,8 @@ import four from '../images/four.png';
 import five from '../images/five.png';
 import six from '../images/six.png';
 import Popover from "@material-ui/core/Popover/Popover";
+import logo from '../images/logo.png';
+import smallLogo from '../images/small-logo.png';
 
 export default class ManagerGame extends React.Component {
 
@@ -61,20 +64,27 @@ export default class ManagerGame extends React.Component {
 
     const images = [one, two, three, four, five, six];
     return (
-        <div>
+        <div class="row">
+          <div className="right" style={{textAlign: "right"}}>
+            <a href={"https://yuni.co.il/"}> <img src={logo} alt="Logo"
+                                                  width={"92%"}/></a>
+          </div>
+
           <CssBaseline/>
           <Container maxWidth="md">
-            <Typography variant="h3" style={{textAlign: "center"}} gutterBottom>
-              ניהול משחק
-            </Typography>
             <Typography component="div"
                         style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
+            <Typography variant="h3" style={{textAlign: "center"}}
+                        gutterBottom>
+              ניהול משחק
+            </Typography>
               {this.state.error && <div
                   style={{color: "red"}}>ERROR: {this.state.error}</div>}
               <br/>
 
               <div>
-                <div className={"button_margin"} style={{textAlign: "center"}}>
+                <div className={"button_margin"}
+                     style={{textAlign: "center"}}>
                   <Popover
                       id={'simple-popover'}
                       open={this.state.anchorEl !== null}
@@ -89,17 +99,29 @@ export default class ManagerGame extends React.Component {
                         horizontal: 'right',
                       }}
                   >
-                    <div style={{color: "green", textAlign: "center", direction: "rtl"}}>הקישור למשחק הועתק!</div>
+                    <div style={{
+                      color: "green",
+                      textAlign: "center",
+                      direction: "rtl"
+                    }}>הקישור למשחק הועתק!
+                    </div>
                   </Popover>
 
-                  <Button variant={"contained"} onClick={this.initGame}>התחל סבב חדש</Button>
-                  <Button variant={"contained"} onClick={this.copyToClipboard}>העתק קישור למשחק</Button>
+                  <Button variant={"contained"} onClick={this.initGame}>התחל
+                    סבב חדש</Button>
+                  <Button variant={"contained"}
+                          onClick={this.copyToClipboard}>העתק קישור
+                    למשחק</Button>
                 </div>
 
-                <div style={{textAlign: "center"}} className={"button_margin"}>
-                  <Button variant={"contained"} onClick={this.getAllDices}>חשוף את כל הקוביות</Button>
-                  <Button variant={"contained"} onClick={this.getAllPlayers}>עדכן את רשימת השחקנים</Button>
-                  <Button variant={"contained"} onClick={this.rollAllDices}>הטל את כל הקוביות</Button>
+                <div style={{textAlign: "center"}}
+                     className={"button_margin"}>
+                  <Button variant={"contained"} onClick={this.getAllDices}>חשוף
+                    את כל הקוביות</Button>
+                  <Button variant={"contained"} onClick={this.getAllPlayers}>עדכן
+                    את רשימת השחקנים</Button>
+                  <Button variant={"contained"} onClick={this.rollAllDices}>הטל
+                    את כל הקוביות</Button>
                 </div>
               </div>
 
@@ -113,9 +135,9 @@ export default class ManagerGame extends React.Component {
                       {images.map(image => {
                         return <TableCell>
                           <img alt={"Nothing"} src={image} style={{
-                          height: "50px",
-                          width: "50px"
-                        }}/>
+                            height: "50px",
+                            width: "50px"
+                          }}/>
                         </TableCell>
                       })}
                     </TableRow>
@@ -125,7 +147,8 @@ export default class ManagerGame extends React.Component {
                     <TableRow>
                       {
                         [1, 2, 3, 4, 5, 6].map(dice => {
-                          return <TableCell> {this.getDistribution(dice)}</TableCell>
+                          return <TableCell> {this.getDistribution(
+                              dice)}</TableCell>
                         })
                       }
                     </TableRow>
@@ -136,6 +159,9 @@ export default class ManagerGame extends React.Component {
 
             </Typography>
           </Container>
+          <div className="footer">
+            <p> <img src={smallLogo} height={"20px"} width={"20px"} alt={""}/>    האתר נכתב על ידי נעם לידני עבור </p>
+          </div>
         </div>
     )
   }

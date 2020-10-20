@@ -1,35 +1,36 @@
 import * as React from "react";
 import 'react-dice-complete/dist/react-dice-complete.css'
 import "../css/game.css"
+import "../css/page.css"
 import Container from "@material-ui/core/Container/Container";
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Typography from "@material-ui/core/Typography/Typography";
 import Button from "@material-ui/core/Button/Button";
-import GamesTable from "./GamesTable";
-import {createGame, getAllGames} from "../service/gameSevice";
+import {createGame} from "../service/gameSevice";
+import TextField from "@material-ui/core/TextField/TextField";
 import logo from '../images/logo.png';
 import smallLogo from "../images/small-logo.png";
 
-export default class GamesCreator extends React.Component {
+export default class CreateGameForm extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      games: [],
+      gameName: null,
+      game: undefined,
       error: undefined
     };
-    this.getAllGames();
   }
 
   createGame = async () => {
+    debugger;
     this.setState({
       error: undefined
     });
     try {
-      let arr = this.state.games;
-      arr.push(await createGame(Math.floor((Date.now() / 1000) % 100000) + "מנהל_"));
+      let game = await createGame(this.state.gameName);
       this.setState({
-        games: arr
+        game: game
       })
     }
     catch (e) {
@@ -37,23 +38,7 @@ export default class GamesCreator extends React.Component {
         error: e.message
       })
     }
-
-  };
-
-  getAllGames = async () => {
-    this.setState({
-      error: undefined
-    });
-    try {
-      this.setState({
-        games: await getAllGames()
-      })
-    }
-    catch (e) {
-      this.setState({
-        error: e.message
-      })
-    }
+    this.props.history.push("/game/" + this.state.game.guid);
   };
 
   render() {
@@ -71,16 +56,18 @@ export default class GamesCreator extends React.Component {
                         style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
 
               <Typography variant="h3" gutterBottom style={{textAlign: "center"}}>
-                משחקים פעילים
+                צור משחק חדש
               </Typography>
 
               <div className={"button_margin"} style={{textAlign: "center"}}>
-                <Button variant="contained" color="default" onClick={() => this.createGame()}>הוסף משחק</Button>
-                <Button variant="contained" color="default" onClick={() => this.getAllGames()}>עדכן את רשימת המשחקים</Button>
+                <form style={{textAlign: "center"}} noValidate autoComplete="off">
+                  <TextField id="standard-basic" label="שם המשחק" required={true} size={'medium'} onChange={(event) => this.setState({gameName: event.target.value})}/>
+                </form>
               </div>
 
-              {this.state.games.length > 0 && <GamesTable
-                  games={this.state.games}/>}
+              <div className={"button_margin"} style={{textAlign: "center"}}>
+                  <Button variant="contained" color="default" disabled={this.state.gameName == null} onClick={() => this.createGame()}>צור משחק ועבור לשחק</Button>
+              </div>
 
             </Typography>
           </Container>

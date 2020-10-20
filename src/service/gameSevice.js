@@ -1,8 +1,11 @@
 import API from "./API";
 
-export let createGame = async () => {
+export let createGame = async (name) => {
+  const game = {
+    "name" : name
+  };
   return API.post(
-      'games',
+      'games', game
   )
   .then((response) => {
         if (response.data) {

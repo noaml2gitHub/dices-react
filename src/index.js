@@ -6,11 +6,13 @@ import {HashRouter, Route} from "react-router-dom";
 import GamesCreator from "./creator/GamesCreator";
 import ManagerGame from "./manager/ManagerGame";
 import Player from "./player/Player";
+import CreateGameForm from "./manager/CreateGameForm";
 
 ReactDOM.render(
     <React.StrictMode>
       <HashRouter>
-        <Route exact path={"/"} component={GamesCreator}/>
+        <Route exact path={"/"} component={CreateGameForm}/>
+        <Route exact path={"/admin"} component={GamesCreator}/>
         <Route exact path={"/game/:guid"} component={ManagerGame}/>
         <Route exact path={"/game/:guid/player"} component={Player}/>
       </HashRouter>
