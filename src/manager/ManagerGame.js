@@ -21,6 +21,7 @@ import three from '../images/three.png';
 import four from '../images/four.png';
 import five from '../images/five.png';
 import six from '../images/six.png';
+import Popover from "@material-ui/core/Popover/Popover";
 
 export default class ManagerGame extends React.Component {
 
@@ -32,7 +33,8 @@ export default class ManagerGame extends React.Component {
       dices: {},
       players: [],
       reveal: false,
-      distribution: []
+      distribution: [],
+      anchorEl: null
     }
   }
 
@@ -60,11 +62,10 @@ export default class ManagerGame extends React.Component {
     const images = [one, two, three, four, five, six];
     return (
         <div>
-
           <CssBaseline/>
-          <Container maxWidth="sm">
-            <Typography variant="h3" gutterBottom>
-              Game Manager
+          <Container maxWidth="md">
+            <Typography variant="h3" style={{textAlign: "center"}} gutterBottom>
+              ניהול משחק
             </Typography>
             <Typography component="div"
                         style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
@@ -72,11 +73,35 @@ export default class ManagerGame extends React.Component {
                   style={{color: "red"}}>ERROR: {this.state.error}</div>}
               <br/>
 
-              <Button variant={"contained"} onClick={this.initGame}>New Round</Button>
-              <br/>
-              <Button variant={"contained"} onClick={this.getAllDices}>Reveal All Dices</Button>
-              <Button variant={"contained"} onClick={this.getAllPlayers}>Update players list</Button>
-              <Button variant={"contained"} onClick={this.rollAllDices}>Roll All Dices</Button>
+              <div>
+                <div className={"button_margin"} style={{textAlign: "center"}}>
+                  <Popover
+                      id={'simple-popover'}
+                      open={this.state.anchorEl !== null}
+                      anchorEl={this.state.anchorEl}
+                      onClose={() => this.setState({anchorEl: null})}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                  >
+                    <div style={{color: "green", textAlign: "center", direction: "rtl"}}>הקישור למשחק הועתק!</div>
+                  </Popover>
+
+                  <Button variant={"contained"} onClick={this.initGame}>התחל סבב חדש</Button>
+                  <Button variant={"contained"} onClick={this.copyToClipboard}>העתק קישור למשחק</Button>
+                </div>
+
+                <div style={{textAlign: "center"}} className={"button_margin"}>
+                  <Button variant={"contained"} onClick={this.getAllDices}>חשוף את כל הקוביות</Button>
+                  <Button variant={"contained"} onClick={this.getAllPlayers}>עדכן את רשימת השחקנים</Button>
+                  <Button variant={"contained"} onClick={this.rollAllDices}>הטל את כל הקוביות</Button>
+                </div>
+              </div>
 
               {this.state.players.length > 0 && <PlayersTable
                   players={this.state.players} dices={this.state.dices}/>}
@@ -114,6 +139,18 @@ export default class ManagerGame extends React.Component {
         </div>
     )
   }
+
+  copyToClipboard = (event) => {
+    const el = document.createElement('textarea');
+    el.value = document.URL+"/player";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    this.setState({
+      anchorEl: event.currentTarget
+    })
+  };
 
   getDistribution = (idx) => {
     return this.state.distribution[idx]

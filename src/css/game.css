@@ -8,10 +8,22 @@ table, th, td {
   border: #282c34 1px solid;
 }
 
+table th, table td{
+  text-align: center !important;
+}
+
 thead{
-  background-color: gold;
+  background-color: #e5e5e5;
 }
 
 .error input{
   border-bottom: 1px solid #eb516d;
+}
+
+.button_margin > *{
+  margin: 8px !important;
+}
+
+.popover {
+  color: red;
 }

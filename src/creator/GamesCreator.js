@@ -4,7 +4,6 @@ import "../css/game.css"
 import Container from "@material-ui/core/Container/Container";
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Typography from "@material-ui/core/Typography/Typography";
-import ButtonGroup from "@material-ui/core/ButtonGroup/ButtonGroup";
 import Button from "@material-ui/core/Button/Button";
 import GamesTable from "./GamesTable";
 import {createGame, getAllGames} from "../service/gameSevice";
@@ -65,15 +64,14 @@ export default class GamesCreator extends React.Component {
             <Typography component="div"
                         style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
 
-              <Typography variant="h3" gutterBottom>
-                Active Games
+              <Typography variant="h3" gutterBottom style={{textAlign: "center"}}>
+                משחקים פעילים
               </Typography>
 
-              <ButtonGroup color="primary"
-                           aria-label="outlined primary button group">
-                <Button onClick={() => this.createGame()}>Add Game</Button>
-                <Button onClick={() => this.getAllGames()}>Get All Games</Button>
-              </ButtonGroup>
+              <div className={"button_margin"} style={{textAlign: "center"}}>
+                <Button variant="contained" color="default" onClick={() => this.createGame()}>הוסף משחק</Button>
+                <Button variant="contained" color="default" onClick={() => this.getAllGames()}>עדכן את רשימת המשחקים</Button>
+              </div>
 
               {this.state.games.length > 0 && <GamesTable
                   games={this.state.games}/>}

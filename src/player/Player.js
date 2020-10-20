@@ -70,31 +70,33 @@ export default class Player extends React.Component {
     }
 
     return (
-        <div>
+        <div style={{textAlign: "center"}}>
         {this.state.error && <div
             style={{color: "red"}}>ERROR: {this.state.error}</div>}
         <CssBaseline/>
         <Container maxWidth="sm">
           <Typography component="div"
                       style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
-            <Typography variant="h3" gutterBottom>
-              Hello {this.state.player && this.state.player.name}
+            <Typography variant="h3" gutterBottom style={{marginTop: "10px"}}>
+              {this.state.player && this.state.player.name} שלום
             </Typography>
             <ButtonGroup color="primary"
-                         aria-label="outlined primary button group">
-              <Button onClick={() => this.rollAll()}>Reveal My Dices</Button>
+                         aria-label="outlined primary button group" style={{marginTop: "40px"}}>
+              <Button onClick={() => this.rollAll()}>חשוף את הקוביות שלי לסבב זה</Button>
             </ButtonGroup>
 
-            { this.state.rolled && <ReactDice
-                numDice={this.state.player.numberOfDices}
-                defaultRoll={1}
-                outline={true}
-                disableIndividual={true}
-                ref={dice => this.reactDice = dice}
-                faceColor={"#f0f0ff"}
-                dotColor={"#000000"}
-                dieSize={50}
-                margin={5} /> }
+            <div style={{marginTop: "25px"}}>
+              { this.state.rolled && <ReactDice
+                  numDice={this.state.player.numberOfDices}
+                  defaultRoll={1}
+                  outline={true}
+                  disableIndividual={true}
+                  ref={dice => this.reactDice = dice}
+                  faceColor={"#f0f0ff"}
+                  dotColor={"#000000"}
+                  dieSize={50}
+                  margin={30} /> }
+            </div>
           </Typography>
         </Container>
       </div>

@@ -50,16 +50,18 @@ export default class PlayersTable extends React.Component {
             <Table style={{minWidth: "650"}} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Player Name</TableCell>
-                  <TableCell>Number Of Dices</TableCell>
-                  <TableCell>Player's Dices</TableCell>
-                  <TableCell>Action</TableCell>
+                  <TableCell><strong>מספר שחקן</strong></TableCell>
+                  <TableCell><strong>שם השחקן</strong></TableCell>
+                  <TableCell><strong>מספר הקוביות</strong></TableCell>
+                  <TableCell><strong>קוביות</strong></TableCell>
+                  <TableCell><strong>פעולות</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {
                   players && players.map(player => {
                     return <TableRow>
+                      <TableCell>{players.indexOf(player) + 1}</TableCell>
                       <TableCell>{player.name}</TableCell>
                       <TableCell>
                         <select value={player.numberOfDices} onChange={(event) => this.updateNumberOfDices(player, event.target.value)}>
@@ -88,7 +90,7 @@ export default class PlayersTable extends React.Component {
     if (confirm){
       API.delete(
           'players/' + player.id
-      ).then((response) => {
+      ).then(() => {
         let copy = this.state.players;
         let index = this.getIndex(copy, 'id', player.id);
         if (index !== -1){
