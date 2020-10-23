@@ -27,7 +27,7 @@ export default class GamesCreator extends React.Component {
     });
     try {
       let arr = this.state.games;
-      arr.push(await createGame(Math.floor((Date.now() / 1000) % 100000) + "מנהל_"));
+      arr.push(await createGame("מנהל_"+Math.floor((Date.now() / 1000) % 100000)));
       this.setState({
         games: arr
       })

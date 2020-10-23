@@ -36,21 +36,26 @@ export default class GamesTable extends React.Component {
             <Table style={{minWidth: "650"}} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell><strong>מזהה</strong></TableCell>
-                  <TableCell><strong>שם</strong></TableCell>
-                  <TableCell><strong>מצב</strong></TableCell>
                   <TableCell><strong>פעולות</strong></TableCell>
+                  <TableCell><strong>מצב</strong></TableCell>
+                  <TableCell><strong>תאריך</strong></TableCell>
+                  <TableCell><strong>שם</strong></TableCell>
+                  <TableCell><strong>מזהה</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {
                   games && games.map(game => {
                     return <TableRow>
-                      <TableCell><Link to={"/game/"+game.guid}>{game.guid}</Link></TableCell>
-                      <TableCell>{game.name}</TableCell>
-                      <TableCell>{game.state}</TableCell>
                       <TableCell>
-                        <button><img alt={""} src={del} style={{width:"25px"}} onClick={() => this.deleteGame(game)}/></button></TableCell>
+                        <button><img alt={"מחק"} src={del} style={{width:"25px"}} onClick={() => this.deleteGame(game)}/></button>
+                      </TableCell>
+                      <TableCell>{game.state}</TableCell>
+                      <TableCell>{new Date(game.createdDate).toLocaleDateString() + ", " + new Date(game.createdDate).toLocaleTimeString()}</TableCell>
+                      <TableCell>{game.name}</TableCell>
+                      <TableCell>
+                        <Link to={"/game/"+game.guid}>{game.guid}</Link>
+                      </TableCell>
                     </TableRow>
                   })
                 }

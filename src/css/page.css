@@ -12,7 +12,7 @@
 }
 
 .footer{
-  margin-top: 1rem;
+  margin-top: calc(5% + 10px);
   padding: 1rem;
   background-color: rgb(235, 195, 64);
   position: fixed;

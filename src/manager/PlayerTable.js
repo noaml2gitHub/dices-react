@@ -50,19 +50,19 @@ export default class PlayersTable extends React.Component {
             <Table style={{minWidth: "650"}} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell><strong>מספר שחקן</strong></TableCell>
-                  <TableCell><strong>שם השחקן</strong></TableCell>
-                  <TableCell><strong>מספר הקוביות</strong></TableCell>
-                  <TableCell><strong>קוביות</strong></TableCell>
                   <TableCell><strong>פעולות</strong></TableCell>
+                  <TableCell><strong>קוביות</strong></TableCell>
+                  <TableCell><strong>מספר הקוביות</strong></TableCell>
+                  <TableCell><strong>שם השחקן</strong></TableCell>
+                  <TableCell><strong>מספר שחקן</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {
                   players && players.map(player => {
                     return <TableRow>
-                      <TableCell>{players.indexOf(player) + 1}</TableCell>
-                      <TableCell>{player.name}</TableCell>
+                      <TableCell><button><img alt={""} src={del} style={{width:"25px"}} onClick={() => this.deletePlayer(player)}/></button></TableCell>
+                      <TableCell>{this.paintDices(player.id)}</TableCell>
                       <TableCell>
                         <select value={player.numberOfDices} onChange={(event) => this.updateNumberOfDices(player, event.target.value)}>
                           <option value="1">1</option>
@@ -72,8 +72,8 @@ export default class PlayersTable extends React.Component {
                           <option value="5">5</option>
                         </select>
                       </TableCell>
-                      <TableCell>{this.paintDices(player.id)}</TableCell>
-                      <TableCell><button><img alt={""} src={del} style={{width:"25px"}} onClick={() => this.deletePlayer(player)}/></button></TableCell>
+                      <TableCell>{player.name}</TableCell>
+                      <TableCell>{players.indexOf(player) + 1}</TableCell>
                     </TableRow>
                   })
                 }

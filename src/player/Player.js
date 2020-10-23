@@ -9,6 +9,7 @@ import ReactDice from "react-dice-complete";
 import 'react-dice-complete/dist/react-dice-complete.css'
 import logo from "../images/logo.png";
 import smallLogo from "../images/small-logo.png";
+import TextField from "@material-ui/core/TextField/TextField";
 
 export default class Player extends React.Component {
 
@@ -17,8 +18,9 @@ export default class Player extends React.Component {
     this.state = {
       gameGuid: "",
       error: undefined,
-      player: undefined,
-      dices: []
+      player: null,
+      dices: [],
+      playerName: null
     };
   }
 
@@ -27,9 +29,6 @@ export default class Player extends React.Component {
     this.setState({
       gameGuid: params.guid
     });
-    if (this.state.player === undefined){
-      this.createPlayer(params.guid);
-    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -40,18 +39,16 @@ export default class Player extends React.Component {
     }
   }
 
-  getRandomName = () => {
-    return this.items[Math.floor(Math.random()*this.items.length)] +'_' + Math.floor((Date.now() / 1000) % 100000);
-  };
+  // getRandomName = () => {
+  //   return this.items[Math.floor(Math.random()*this.items.length)] +'_' + Math.floor((Date.now() / 1000) % 100000);
+  // };
+  //
+  // items = ['Euclid', 'Pythagoreans', 'Archimedes', 'Kepler', 'Descartes', 'Pascal', 'Newton', 'Leibniz', 'Euler', 'Gauss'];
 
-  items = ['Euclid', 'Pythagoreans', 'Archimedes', 'Kepler', 'Descartes', 'Pascal', 'Newton', 'Leibniz', 'Euler', 'Gauss'];
-
-  createPlayer = (gameGuid) =>{
-    debugger;
-    let name = this.getRandomName();
+  createPlayer = () =>{
     let body = {
-      "gameGuid": gameGuid,
-      "name": name,
+      "gameGuid": this.state.gameGuid,
+      "name": this.state.playerName,
       "numberOfDices": 5
     };
 
@@ -84,12 +81,26 @@ export default class Player extends React.Component {
         <Container maxWidth="md">
           <Typography component="div"
                       style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
-            <Typography variant="h3" gutterBottom style={{marginTop: "10px"}}>
-              {this.state.player && this.state.player.name} שלום
+
+            <div className={"button_margin"} style={{textAlign: "center"}}>
+              <form style={{textAlign: "center"}} noValidate autoComplete="off">
+                <TextField id="standard-basic" label="שם השחקן/ית" required={true} size={'medium'} onChange={(event) => this.setState({playerName: event.target.value})} disabled={this.state.player != null}/>
+              </form>
+            </div>
+
+            <div className={"button_margin"} style={{textAlign: "center"}}>
+              <Button variant="contained" color="default" disabled={this.state.playerName == null || this.state.player != null} onClick={() => this.createPlayer()}>!הצטרף למשחק</Button>
+            </div>
+
+            {this.state.player != null && <Typography variant="h3" gutterBottom
+                                                      style={{marginTop: "10px"}}>
+                   שלום  {this.state.player && this.state.player.name}
             </Typography>
+            }
+
             <ButtonGroup color="primary"
                          aria-label="outlined primary button group" style={{marginTop: "40px"}}>
-              <Button onClick={() => this.rollAll()}>חשוף את הקוביות שלי לסבב זה</Button>
+              <Button onClick={() => this.rollAll()} disabled={this.state.player == null}>חשוף את הקוביות שלי לסבב זה</Button>
             </ButtonGroup>
 
             <div style={{marginTop: "25px"}}>
@@ -115,29 +126,41 @@ export default class Player extends React.Component {
 
   rollAll() {
     API.get(
-        'dices?gameGuid=' + this.state.gameGuid + '&playerId=' + this.state.player.id
+        'players/' + this.state.player.id
     ).then((response) => {
-      if (response.data) {
-        let arr = response.data;
-        if (arr.length === 0){
-          alert("You can't reveal your dices yet");
-        } else {
-          let values = [];
-          arr.map((dice) => {
-            values.push(dice.value);
-            return values;
-          });
-          this.reactDice.rollAll(values);
-        }
-      }
-      else {
-        throw Error("Some Error!!!!")
+      if (response.data){
+        this.setState({
+          player: response.data
+        });
+        API.get(
+            'dices?gameGuid=' + this.state.gameGuid + '&playerId=' + this.state.player.id
+        ).then((response) => {
+          if (response.data) {
+            let arr = response.data;
+            if (arr.length === 0){
+              alert("הקוביות עדיין לא הוטלו על ידי מנהל/ת המשחק");
+            } else {
+              this.setState({
+                rolled: true
+              });
+              let values = [];
+              arr.map((dice) => {
+                values.push(dice.value);
+                return values;
+              });
+              this.reactDice.rollAll(values);
+            }
+          }
+          else {
+            throw Error("Some Error!!!!")
+          }
+        }).catch(function(response) {
+          alert(response.message);
+        });
       }
     }).catch(function(response) {
       alert(response.message);
     });
-    this.setState({
-      rolled: true
-    })
+
   }
 }
