@@ -64,16 +64,16 @@ export default class ManagerGame extends React.Component {
 
     const images = [one, two, three, four, five, six];
     return (
-        <div class="row">
+        <div class="row" style={{marginBottom: "100px"}}>
           <div className="right" style={{textAlign: "right"}}>
             <a href={"https://yuni.co.il/"}> <img src={logo} alt="Logo"
                                                   width={"92%"}/></a>
           </div>
 
           <CssBaseline/>
-          <Container maxWidth="md">
+          <Container maxWidth="md" style={{marginBottom: "100px"}}>
             <Typography component="div"
-                        style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
+                        style={{backgroundColor: '#cfe8fc', marginBottom: "100px"}}>
             <Typography variant="h3" style={{textAlign: "center"}}
                         gutterBottom>
               ניהול משחק
@@ -158,10 +158,10 @@ export default class ManagerGame extends React.Component {
               </TableContainer>}
 
             </Typography>
+              <div className="footer">
+                <p> <img src={smallLogo} height={"20px"} width={"20px"} alt={""}/>    האתר נכתב על ידי נעם לידני עבור </p>
+              </div>
           </Container>
-          <div className="footer">
-            <p> <img src={smallLogo} height={"20px"} width={"20px"} alt={""}/>    האתר נכתב על ידי נעם לידני עבור </p>
-          </div>
         </div>
     )
   }

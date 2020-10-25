@@ -53,7 +53,7 @@ export default class CreateGameForm extends React.Component {
           <CssBaseline/>
           <Container maxWidth="md">
             <Typography component="div"
-                        style={{backgroundColor: '#cfe8fc', height: '100vh'}}>
+                        style={{backgroundColor: '#cfe8fc', marginBottom: "100px"}}>
 
               <Typography variant="h3" gutterBottom style={{textAlign: "center"}}>
                 צור משחק חדש
